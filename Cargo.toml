@@ -1,0 +1,24 @@
+[package]
+name = "mpc_recovery_test"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+
+[dependencies]
+hex = "0.4.3"
+k256 = { version = "0.13.1", features = ["sha256", "ecdsa", "serde"] }
+sha2 = "0.10.8"
+near-sdk = { version = "4.1.1", default-features = false, features = [
+    "wee_alloc",
+    "legacy",
+    "abi",
+] }
+near-primitives = "0.17.0"
+
+# For `near_primitives`, you will need to find the appropriate version of the NEAR SDK or the specific crate that provides it.
+# near_primitives = "x.y.z" # This is a placeholder. Replace x.y.z with the actual version number.
+
+# If `crate::types::PublicKey` and `crate::util::ScalarExt` are part of your local modules, no additional dependencies are needed for them.
+# However, if they are in separate crates, you would need to include those crates here as well.
