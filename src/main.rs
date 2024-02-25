@@ -29,9 +29,9 @@ fn main() {
     println!("\nDerived Public Key: {:?}\n", derived_public_key);
 
     let derived_public_key_bytes = derived_public_key.to_encoded_point(false).as_bytes().to_vec();
-    let hash = Keccak256::digest(&derived_public_key_bytes[1..]); // Skip the first byte
-    let eth_address = &hash[12..]; // Take the last 20 bytes
+    let hash = Keccak256::digest(&derived_public_key_bytes[1..]); 
+    let eth_address = &hash[12..]; 
 
-    println!("\nETH Address: {:?}\n", hex::encode(eth_address));
+    println!("\nETH Address: 0x{}\n", hex::encode(eth_address));
 
 }
