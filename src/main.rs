@@ -1,30 +1,29 @@
 mod kdf;
 mod types;
 mod util;
-fn main() {
-    use kdf::{derive_epsilon, derive_key};
-    use near_primitives::types::AccountId;
-    use k256::ecdsa::VerifyingKey;
-    use k256::EncodedPoint;
+extern crate bs58;
 
-    // Example public key and account ID
+fn main() {
+    use k256::{AffinePoint, EncodedPoint};
+    use k256::elliptic_curve::sec1::FromEncodedPoint;
+    
     let public_key_str = "secp256k1:37aFybhUHCxRdDkuCcB3yHzxqK7N8EQ745MujyAQohXSsYymVeHzhLxKvZ2qYeRHf3pGFiAsxqFJZjpF9gP2JV5u";
-    let account_id: AccountId = "felipe-sandbox.testnet".parse().unwrap();
+    let account_id: near_primitives::types::AccountId = "felipe-sandbox.testnet".parse().unwrap();
     let path = ",ethereum,near.org";
 
-    // Step 1: Extract the key part from the string and convert it to a PublicKey type
-    // This step is hypothetical and needs to be adjusted based on the actual PublicKey type and conversion method
-    let public_key_bytes = hex::decode(&public_key_str[9..]).unwrap(); // Skip the prefix and decode
-    let public_key = near_crypto::PublicKey::from(public_key_bytes); // Adjust this line to match the actual conversion method
+    let mut pk_bytes = vec![0x04];
+    let hex_str = public_key_str.split(':').nth(1).expect("Invalid format for public_key_str");
 
-    // Step 2: Convert the PublicKey to an affine point
-    let affine_point = public_key.into_affine_point();
+    // Decode the base58 string
+    let decoded_bytes = bs58::decode(hex_str).into_vec().expect("Failed to decode base58");
 
-    // Derive epsilon
-    let epsilon = derive_epsilon(&account_id, path);
+    // Extend `pk_bytes` with the decoded bytes
+    pk_bytes.extend_from_slice(&decoded_bytes);
 
-    // Derive the new public key using the original public key and epsilon
-    let derived_public_key = derive_key(public_key, epsilon);
+    let point = EncodedPoint::from_bytes(pk_bytes).unwrap();
+    let public_key = AffinePoint::from_encoded_point(&point).unwrap();
+    let epsilon = &kdf::derive_epsilon(&account_id, path);
+    let derived_public_key= &kdf::derive_key(public_key, *epsilon);
 
     println!("Derived Public Key: {:?}", derived_public_key);
 }
