@@ -18,6 +18,7 @@ near-sdk = { version = "4.1.1", default-features = false, features = [
 near-primitives = "0.17.0"
 near-workspaces = { git = "https://github.com/near/near-workspaces-rs.git", branch = "main" }
 bs58 = "0.5.0"
+sha3 = "0.10.8"
 
 # For `near_primitives`, you will need to find the appropriate version of the NEAR SDK or the specific crate that provides it.
 # near_primitives = "x.y.z" # This is a placeholder. Replace x.y.z with the actual version number.

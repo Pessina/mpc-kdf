@@ -2720,6 +2720,7 @@ dependencies = [
  "near-sdk",
  "near-workspaces",
  "sha2 0.10.8",
+ "sha3",
 ]
 
 [[package]]
